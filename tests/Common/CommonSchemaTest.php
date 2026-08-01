@@ -163,12 +163,16 @@ abstract class CommonSchemaTest extends IntegrationTestCase
 
     public function testGetSchemaChecks(): void
     {
+        $this->loadFixture();
+
         $schema = $this->getSharedConnection()->getSchema();
         $tableChecks = $schema->getSchemaChecks();
+        $tableNames = $schema->getTableNames();
 
         $this->assertIsArray($tableChecks);
 
-        foreach ($tableChecks as $checks) {
+        foreach ($tableChecks as $tableName => $checks) {
+            $this->assertContains($tableName, $tableNames);
             $this->assertIsArray($checks);
             $this->assertContainsOnlyInstancesOf(Check::class, $checks);
         }
@@ -176,12 +180,16 @@ abstract class CommonSchemaTest extends IntegrationTestCase
 
     public function testGetSchemaDefaultValues(): void
     {
+        $this->loadFixture();
+
         $schema = $this->getSharedConnection()->getSchema();
         $tableDefaultValues = $schema->getSchemaDefaultValues();
+        $tableNames = $schema->getTableNames();
 
         $this->assertIsArray($tableDefaultValues);
 
-        foreach ($tableDefaultValues as $defaultValues) {
+        foreach ($tableDefaultValues as $tableName => $defaultValues) {
+            $this->assertContains($tableName, $tableNames);
             $this->assertIsArray($defaultValues);
             $this->assertContainsOnlyInstancesOf(DefaultValue::class, $defaultValues);
         }
@@ -189,25 +197,46 @@ abstract class CommonSchemaTest extends IntegrationTestCase
 
     public function testGetSchemaForeignKeys(): void
     {
+        $this->loadFixture();
+
         $schema = $this->getSharedConnection()->getSchema();
         $tableForeignKeys = $schema->getSchemaForeignKeys();
+        $tableNames = $schema->getTableNames();
+
+        $this->assertNotEmpty($tableForeignKeys);
 
         $this->assertIsArray($tableForeignKeys);
 
-        foreach ($tableForeignKeys as $foreignKeys) {
+        foreach ($tableForeignKeys as $tableName => $foreignKeys) {
+            // The result is indexed by the name of the table the foreign keys belong to,
+            // see https://github.com/yiisoft/db/issues/1176
+            $this->assertIsString($tableName);
+            $this->assertContains($tableName, $tableNames);
+
             $this->assertIsArray($foreignKeys);
             $this->assertContainsOnlyInstancesOf(ForeignKey::class, $foreignKeys);
+
+            foreach ($foreignKeys as $foreignKey) {
+                $this->assertNotSame('', $foreignKey->foreignTableName);
+                $this->assertNotSame([], $foreignKey->foreignColumnNames);
+            }
         }
     }
 
     public function testGetSchemaIndexes(): void
     {
+        $this->loadFixture();
+
         $schema = $this->getSharedConnection()->getSchema();
         $tableIndexes = $schema->getSchemaIndexes();
+        $tableNames = $schema->getTableNames();
+
+        $this->assertNotEmpty($tableIndexes);
 
         $this->assertIsArray($tableIndexes);
 
-        foreach ($tableIndexes as $indexes) {
+        foreach ($tableIndexes as $tableName => $indexes) {
+            $this->assertContains($tableName, $tableNames);
             $this->assertIsArray($indexes);
             $this->assertContainsOnlyInstancesOf(Index::class, $indexes);
         }
@@ -215,21 +244,34 @@ abstract class CommonSchemaTest extends IntegrationTestCase
 
     public function testGetSchemaPrimaryKeys(): void
     {
+        $this->loadFixture();
+
         $schema = $this->getSharedConnection()->getSchema();
         $tablePks = $schema->getSchemaPrimaryKeys();
+        $tableNames = $schema->getTableNames();
+
+        $this->assertNotEmpty($tablePks);
 
         $this->assertIsArray($tablePks);
         $this->assertContainsOnlyInstancesOf(Index::class, $tablePks);
+
+        foreach (array_keys($tablePks) as $tableName) {
+            $this->assertContains($tableName, $tableNames);
+        }
     }
 
     public function testGetSchemaUniques(): void
     {
+        $this->loadFixture();
+
         $schema = $this->getSharedConnection()->getSchema();
         $tableUniques = $schema->getSchemaUniques();
+        $tableNames = $schema->getTableNames();
 
         $this->assertIsArray($tableUniques);
 
-        foreach ($tableUniques as $uniques) {
+        foreach ($tableUniques as $tableName => $uniques) {
+            $this->assertContains($tableName, $tableNames);
             $this->assertIsArray($uniques);
             $this->assertContainsOnlyInstancesOf(Index::class, $uniques);
         }
