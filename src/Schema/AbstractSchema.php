@@ -410,7 +410,7 @@ abstract class AbstractSchema implements SchemaInterface
      * @return Check[][]|DefaultValue[][]|ForeignKey[][]|Index[]|Index[][]|TableSchemaInterface[] The metadata of the given type for all
      * tables in the given schema, indexed by table name.
      *
-     * @psalm-return array<string, mixed>
+     * @psalm-return array<string, Check[]|DefaultValue[]|ForeignKey[]|Index|Index[]|TableSchemaInterface>
      */
     protected function getSchemaMetadata(string $schema, string $type, bool $refresh): array
     {
