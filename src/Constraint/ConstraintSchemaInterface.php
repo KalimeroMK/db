@@ -23,7 +23,9 @@ interface ConstraintSchemaInterface
      * @param bool $refresh Whether to fetch the latest available table schemas. If this is `false`, cached data may be
      * returned if available.
      *
-     * @return Check[] The check constraints for all tables in the database.
+     * @return Check[][] The check constraints for all tables in the database, indexed by table name.
+     *
+     * @psalm-return array<string, Check[]>
      */
     public function getSchemaChecks(string $schema = '', bool $refresh = false): array;
 
@@ -35,7 +37,9 @@ interface ConstraintSchemaInterface
      * @param bool $refresh Whether to fetch the latest available table schemas. If this is `false`, cached data may be
      * returned if available.
      *
-     * @return DefaultValue[] The default value constraints for all tables in the database.
+     * @return DefaultValue[][] The default value constraints for all tables in the database, indexed by table name.
+     *
+     * @psalm-return array<string, DefaultValue[]>
      */
     public function getSchemaDefaultValues(string $schema = '', bool $refresh = false): array;
 
@@ -47,7 +51,10 @@ interface ConstraintSchemaInterface
      * @param bool $refresh Whether to fetch the latest available table schemas. If this is `false`, cached data may be
      * returned if available.
      *
-     * @return ForeignKey[] The foreign keys for all tables in the database.
+     * @return ForeignKey[][] The foreign keys for all tables in the database, indexed by the name of the table the
+     * foreign keys belong to.
+     *
+     * @psalm-return array<string, ForeignKey[]>
      */
     public function getSchemaForeignKeys(string $schema = '', bool $refresh = false): array;
 
@@ -59,7 +66,9 @@ interface ConstraintSchemaInterface
      * @param bool $refresh Whether to fetch the latest available table schemas. If this is false, cached data may be
      * returned if available.
      *
-     * @return Index[] The indexes for all tables in the database.
+     * @return Index[][] The indexes for all tables in the database, indexed by table name.
+     *
+     * @psalm-return array<string, Index[]>
      */
     public function getSchemaIndexes(string $schema = '', bool $refresh = false): array;
 
@@ -71,7 +80,10 @@ interface ConstraintSchemaInterface
      * @param bool $refresh Whether to fetch the latest available table schemas. If this is `false`, cached data may be
      * returned if available.
      *
-     * @return Index[] The primary keys for all tables in the database.
+     * @return Index[] The primary keys for all tables in the database, indexed by table name. Tables without a primary
+     * key are omitted.
+     *
+     * @psalm-return array<string, Index>
      */
     public function getSchemaPrimaryKeys(string $schema = '', bool $refresh = false): array;
 
@@ -83,7 +95,9 @@ interface ConstraintSchemaInterface
      * @param bool $refresh Whether to fetch the latest available table schemas. If this is `false`, cached data may be
      * returned if available.
      *
-     * @return Index[] The unique constraints for all tables in the database.
+     * @return Index[][] The unique constraints for all tables in the database, indexed by table name.
+     *
+     * @psalm-return array<string, Index[]>
      */
     public function getSchemaUniques(string $schema = '', bool $refresh = false): array;
 

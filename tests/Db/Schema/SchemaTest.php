@@ -55,7 +55,7 @@ final class SchemaTest extends IntegrationTestCase
         $schemaMock->expects($this->once())->method('loadTableChecks')->willReturn($checks);
         $tableChecks = $schemaMock->getSchemaChecks();
 
-        $this->assertSame([$checks], $tableChecks);
+        $this->assertSame(['T_constraints_1' => $checks], $tableChecks);
     }
 
     public function testGetSchemaDefaultValues(): void
@@ -71,7 +71,7 @@ final class SchemaTest extends IntegrationTestCase
         $schemaMock->expects($this->once())->method('loadTableDefaultValues')->willReturn($defaultValues);
         $tableDefaultValues = $schemaMock->getSchemaDefaultValues();
 
-        $this->assertSame([$defaultValues], $tableDefaultValues);
+        $this->assertSame(['T_constraints_1' => $defaultValues], $tableDefaultValues);
     }
 
     public function testGetSchemaForeignKeys(): void
@@ -93,7 +93,10 @@ final class SchemaTest extends IntegrationTestCase
         $schemaMock->expects($this->once())->method('loadTableForeignKeys')->willReturn($foreignKeys);
         $tableForeignKeys = $schemaMock->getSchemaForeignKeys();
 
-        $this->assertSame([$foreignKeys], $tableForeignKeys);
+        $this->assertSame(['T_constraints_1' => $foreignKeys], $tableForeignKeys);
+        // The result is indexed by the name of the table the foreign keys belong to, see https://github.com/yiisoft/db/issues/1176
+        $this->assertSame(['T_constraints_1'], array_keys($tableForeignKeys));
+        $this->assertSame('T_constraints_2', $tableForeignKeys['T_constraints_1'][0]->foreignTableName);
     }
 
     public function testGetSchemaIndexes(): void
@@ -109,7 +112,7 @@ final class SchemaTest extends IntegrationTestCase
         $schemaMock->expects($this->once())->method('loadTableIndexes')->willReturn($indexes);
         $tableIndexes = $schemaMock->getSchemaIndexes();
 
-        $this->assertSame([$indexes], $tableIndexes);
+        $this->assertSame(['T_constraints_1' => $indexes], $tableIndexes);
     }
 
     public function testGetSchemaNames(): void

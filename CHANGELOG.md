@@ -4,6 +4,9 @@
 
 - Enh #1172: Refactor `Query::queryScalar()` to use a cloned `Query` object (@darkspock)
 - New #1178: Support `UnitEnum` enums as column values (@Tigrov)
+- Bug #1176: Index the result of `AbstractSchema::getSchemaMetadata()` by table name, so `getSchemaChecks()`,
+  `getSchemaDefaultValues()`, `getSchemaForeignKeys()`, `getSchemaIndexes()`, `getSchemaPrimaryKeys()`,
+  `getSchemaUniques()` and `getTableSchemas()` expose the table each item belongs to (@KalimeroMK)
 
 ## 2.0.1 February 09, 2026
 

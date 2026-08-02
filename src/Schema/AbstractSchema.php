@@ -110,25 +110,25 @@ abstract class AbstractSchema implements SchemaInterface
 
     public function getSchemaChecks(string $schema = '', bool $refresh = false): array
     {
-        /** @var Check[] */
+        /** @var array<string, Check[]> */
         return $this->getSchemaMetadata($schema, SchemaInterface::CHECKS, $refresh);
     }
 
     public function getSchemaDefaultValues(string $schema = '', bool $refresh = false): array
     {
-        /** @var DefaultValue[] */
+        /** @var array<string, DefaultValue[]> */
         return $this->getSchemaMetadata($schema, SchemaInterface::DEFAULT_VALUES, $refresh);
     }
 
     public function getSchemaForeignKeys(string $schema = '', bool $refresh = false): array
     {
-        /** @var ForeignKey[] */
+        /** @var array<string, ForeignKey[]> */
         return $this->getSchemaMetadata($schema, SchemaInterface::FOREIGN_KEYS, $refresh);
     }
 
     public function getSchemaIndexes(string $schema = '', bool $refresh = false): array
     {
-        /** @var Index[] */
+        /** @var array<string, Index[]> */
         return $this->getSchemaMetadata($schema, SchemaInterface::INDEXES, $refresh);
     }
 
@@ -143,13 +143,13 @@ abstract class AbstractSchema implements SchemaInterface
 
     public function getSchemaPrimaryKeys(string $schema = '', bool $refresh = false): array
     {
-        /** @var Index[] */
+        /** @var array<string, Index> */
         return $this->getSchemaMetadata($schema, SchemaInterface::PRIMARY_KEY, $refresh);
     }
 
     public function getSchemaUniques(string $schema = '', bool $refresh = false): array
     {
-        /** @var Index[] */
+        /** @var array<string, Index[]> */
         return $this->getSchemaMetadata($schema, SchemaInterface::UNIQUES, $refresh);
     }
 
@@ -217,7 +217,7 @@ abstract class AbstractSchema implements SchemaInterface
 
     public function getTableSchemas(string $schema = '', bool $refresh = false): array
     {
-        /** @var TableSchemaInterface[] */
+        /** @var array<string, TableSchemaInterface> */
         return $this->getSchemaMetadata($schema, SchemaInterface::SCHEMA, $refresh);
     }
 
@@ -408,7 +408,9 @@ abstract class AbstractSchema implements SchemaInterface
      * returned if available.
      *
      * @return Check[][]|DefaultValue[][]|ForeignKey[][]|Index[]|Index[][]|TableSchemaInterface[] The metadata of the given type for all
-     * tables in the given schema.
+     * tables in the given schema, indexed by table name.
+     *
+     * @psalm-return array<string, Check[]|DefaultValue[]|ForeignKey[]|Index|Index[]|TableSchemaInterface>
      */
     protected function getSchemaMetadata(string $schema, string $type, bool $refresh): array
     {
@@ -416,8 +418,8 @@ abstract class AbstractSchema implements SchemaInterface
         $quoter = $this->db->getQuoter();
         $tableNames = $this->getTableNames($schema, $refresh);
 
-        foreach ($tableNames as $name) {
-            $name = $quoter->quoteSimpleTableName($name);
+        foreach ($tableNames as $tableName) {
+            $name = $quoter->quoteSimpleTableName($tableName);
 
             if ($schema !== '') {
                 $name = $schema . '.' . $name;
@@ -426,7 +428,7 @@ abstract class AbstractSchema implements SchemaInterface
             $tableMetadata = $this->getTableTypeMetadata($type, $name, $refresh);
 
             if ($tableMetadata !== null) {
-                $metadata[] = $tableMetadata;
+                $metadata[$tableName] = $tableMetadata;
             }
         }
 
