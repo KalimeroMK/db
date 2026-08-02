@@ -1,5 +1,10 @@
 # Yii Database Change Log
 
+## 3.0.0 under development
+
+- Chg #1175: Remove `getSchemaChecks()`, `getSchemaDefaultValues()`, `getSchemaIndexes()`, `getSchemaPrimaryKeys()`
+  and `getSchemaUniques()` methods from `ConstraintSchemaInterface` and `AbstractSchema` (@KalimeroMK)
+
 ## 2.0.2 under development
 
 - Enh #1172: Refactor `Query::queryScalar()` to use a cloned `Query` object (@darkspock)

@@ -108,28 +108,10 @@ abstract class AbstractSchema implements SchemaInterface
         return $column;
     }
 
-    public function getSchemaChecks(string $schema = '', bool $refresh = false): array
-    {
-        /** @var array<string, Check[]> */
-        return $this->getSchemaMetadata($schema, SchemaInterface::CHECKS, $refresh);
-    }
-
-    public function getSchemaDefaultValues(string $schema = '', bool $refresh = false): array
-    {
-        /** @var array<string, DefaultValue[]> */
-        return $this->getSchemaMetadata($schema, SchemaInterface::DEFAULT_VALUES, $refresh);
-    }
-
     public function getSchemaForeignKeys(string $schema = '', bool $refresh = false): array
     {
         /** @var array<string, ForeignKey[]> */
         return $this->getSchemaMetadata($schema, SchemaInterface::FOREIGN_KEYS, $refresh);
-    }
-
-    public function getSchemaIndexes(string $schema = '', bool $refresh = false): array
-    {
-        /** @var array<string, Index[]> */
-        return $this->getSchemaMetadata($schema, SchemaInterface::INDEXES, $refresh);
     }
 
     public function getSchemaNames(bool $refresh = false): array
@@ -139,18 +121,6 @@ abstract class AbstractSchema implements SchemaInterface
         }
 
         return $this->schemaNames;
-    }
-
-    public function getSchemaPrimaryKeys(string $schema = '', bool $refresh = false): array
-    {
-        /** @var array<string, Index> */
-        return $this->getSchemaMetadata($schema, SchemaInterface::PRIMARY_KEY, $refresh);
-    }
-
-    public function getSchemaUniques(string $schema = '', bool $refresh = false): array
-    {
-        /** @var array<string, Index[]> */
-        return $this->getSchemaMetadata($schema, SchemaInterface::UNIQUES, $refresh);
     }
 
     public function getTableChecks(string $name, bool $refresh = false): array
