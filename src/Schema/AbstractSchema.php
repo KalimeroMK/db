@@ -377,10 +377,11 @@ abstract class AbstractSchema implements SchemaInterface
      * @param bool $refresh Whether to fetch the latest available table metadata. If this is `false`, cached data may be
      * returned if available.
      *
-     * @return Check[][]|DefaultValue[][]|ForeignKey[][]|Index[]|Index[][]|TableSchemaInterface[] The metadata of the given type for all
+     * @return ForeignKey[][]|TableSchemaInterface[] The metadata of the given type for all
      * tables in the given schema, indexed by table name.
      *
-     * @psalm-return array<string, Check[]|DefaultValue[]|ForeignKey[]|Index|Index[]|TableSchemaInterface>
+     * @psalm-param SchemaInterface::FOREIGN_KEYS|SchemaInterface::SCHEMA $type
+     * @psalm-return array<string, ForeignKey[]|TableSchemaInterface>
      */
     protected function getSchemaMetadata(string $schema, string $type, bool $refresh): array
     {
