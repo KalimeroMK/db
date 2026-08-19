@@ -396,6 +396,7 @@ abstract class AbstractSchema implements SchemaInterface
                 $name = $schema . '.' . $name;
             }
 
+            /** @var ForeignKey[]|TableSchemaInterface|null $tableMetadata */
             $tableMetadata = $this->getTableTypeMetadata($type, $name, $refresh);
 
             if ($tableMetadata !== null) {
