@@ -19,6 +19,7 @@ final class ConvertException
     private const MSG_INTEGRITY_EXCEPTION_1 = 'SQLSTATE[23';
     private const MGS_INTEGRITY_EXCEPTION_2 = 'ORA-00001: unique constraint';
     private const MSG_INTEGRITY_EXCEPTION_3 = 'SQLSTATE[HY';
+    private const MSG_SERIALIZATION_FAILURE = 'SQLSTATE[40001]';
 
     public function __construct(
         private readonly \Exception $e,
@@ -35,6 +36,10 @@ final class ConvertException
         $message = $this->e->getMessage() . PHP_EOL . 'The SQL being executed was: ' . $this->rawSql;
 
         $errorInfo = $this->e instanceof PDOException ? $this->e->errorInfo : null;
+
+        if (str_contains($message, self::MSG_SERIALIZATION_FAILURE)) {
+            return new SerializationFailureException($message, $errorInfo, $this->e);
+        }
 
         return match (
             str_contains($message, self::MSG_INTEGRITY_EXCEPTION_1)

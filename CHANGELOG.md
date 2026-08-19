@@ -2,6 +2,8 @@
 
 ## 2.0.2 under development
 
+- New #868: Add `SerializationFailureException` that is thrown when a transaction fails with SQLSTATE code 40001
+  (@KalimeroMK)
 - Enh #1172: Refactor `Query::queryScalar()` to use a cloned `Query` object (@darkspock)
 - New #1178: Support `UnitEnum` enums as column values (@Tigrov)
 - Bug #1176: Index the result of `AbstractSchema::getSchemaMetadata()` by table name, so `getSchemaChecks()`,
