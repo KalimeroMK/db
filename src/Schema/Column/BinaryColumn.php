@@ -9,6 +9,7 @@ use PDO;
 use Stringable;
 use Yiisoft\Db\Expression\Value\Param;
 use Yiisoft\Db\Constant\ColumnType;
+use Yiisoft\Db\Expression\ExpressionInterface;
 use Yiisoft\Db\Constant\GettypeResult;
 use Yiisoft\Db\Schema\Data\StringableStream;
 use UnitEnum;
@@ -34,6 +35,7 @@ class BinaryColumn extends AbstractColumn
             GettypeResult::BOOLEAN => $value ? '1' : '0',
             GettypeResult::OBJECT => match (true) {
                 $value instanceof StringableStream => new Param($value->getValue(), PDO::PARAM_LOB),
+                $value instanceof ExpressionInterface => $value,
                 $value instanceof Stringable => new Param((string) $value, PDO::PARAM_LOB),
                 $value instanceof BackedEnum => new Param((string) $value->value, PDO::PARAM_LOB),
                 $value instanceof UnitEnum => new Param($value->name, PDO::PARAM_LOB),

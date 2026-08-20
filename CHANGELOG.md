@@ -1,11 +1,9 @@
 # Yii Database Change Log
 
-## 3.0.0 under development
-
-- Chg #960: Pass non-null and non-expression values only to `ColumnInterface::dbTypecast()` implementations.
-  Use the new `Yiisoft\Db\dbTypecast()` function for values that may be `null` or an expression (@KalimeroMK)
-
 ## 2.0.2 under development
+
+- New #960: Add `Yiisoft\Db\dbTypecast()` function that returns `null` and `ExpressionInterface` values as is, and
+  delegates other values to `ColumnInterface::dbTypecast()` (@KalimeroMK)
 
 - Enh #1172: Refactor `Query::queryScalar()` to use a cloned `Query` object (@darkspock)
 - New #1178: Support `UnitEnum` enums as column values (@Tigrov)

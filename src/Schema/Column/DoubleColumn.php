@@ -9,6 +9,7 @@ use DateTimeInterface;
 use Stringable;
 use Yiisoft\Db\Constant\ColumnType;
 use Yiisoft\Db\Constant\GettypeResult;
+use Yiisoft\Db\Expression\ExpressionInterface;
 
 use function gettype;
 use function is_int;
@@ -20,9 +21,9 @@ class DoubleColumn extends AbstractColumn
 {
     protected const DEFAULT_TYPE = ColumnType::DOUBLE;
 
-    public function dbTypecast(mixed $value): float|int|null
+    public function dbTypecast(mixed $value): ExpressionInterface|float|int|null
     {
-        /** @var float|int|null */
+        /** @var ExpressionInterface|float|int|null */
         return match (gettype($value)) {
             GettypeResult::DOUBLE => $value,
             GettypeResult::INTEGER => $value,
@@ -30,6 +31,7 @@ class DoubleColumn extends AbstractColumn
             GettypeResult::STRING => $value === '' ? null : (float) $value,
             GettypeResult::BOOLEAN => $value ? 1.0 : 0.0,
             GettypeResult::OBJECT => match (true) {
+                $value instanceof ExpressionInterface => $value,
                 $value instanceof BackedEnum => $value->value === ''
                     ? null
                     : (is_int($value->value) ? $value->value : (float) $value->value),
