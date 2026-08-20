@@ -11,7 +11,6 @@ use Stringable;
 use UnexpectedValueException;
 use Yiisoft\Db\Constant\ColumnType;
 use Yiisoft\Db\Constant\GettypeResult;
-use Yiisoft\Db\Expression\ExpressionInterface;
 
 use function date_create_immutable;
 use function date_default_timezone_get;
@@ -88,13 +87,12 @@ class DateTimeColumn extends AbstractColumn
      * - float - treated as unix timestamp with microseconds;
      * - DateTimeImmutable;
      * - DateTimeInterface;
-     * - ExpressionInterface;
      *
      * If the value is `string` or a `Stringable` object, it will be converted to a `DateTimeImmutable` object with
      * the default time zone set specified in the {@see $phpTimezone} property. If the conversion fails, the original
      * value will be returned.
      */
-    public function dbTypecast(mixed $value): float|int|string|ExpressionInterface|null
+    public function dbTypecast(mixed $value): float|int|string|null
     {
         /** @psalm-suppress MixedArgument, PossiblyFalseArgument */
         return match (gettype($value)) {
@@ -105,7 +103,6 @@ class DateTimeColumn extends AbstractColumn
             GettypeResult::OBJECT => match (true) {
                 $value instanceof DateTimeImmutable => $this->dbTypecastDateTime($value),
                 $value instanceof DateTimeInterface => $this->dbTypecastDateTime(DateTimeImmutable::createFromInterface($value)),
-                $value instanceof ExpressionInterface => $value,
                 $value instanceof Stringable => $this->dbTypecastString((string) $value),
                 default => $this->throwWrongTypeException($value::class),
             },

@@ -86,7 +86,11 @@ interface ColumnInterface
      * yiisoft/db calls it automatically by when preparing an SQL statement, so you don't usually need to call it
      * directly in your code.
      *
-     * If the value is `null` or an {@see Expression}, there will be no conversion.
+     * If the value is `null`, there will be no conversion.
+     *
+     * Implementations aren't required to accept {@see ExpressionInterface} values. Use the
+     * {@see \Yiisoft\Db\dbTypecast()} function for values that may be expressions — it returns them as is,
+     * without calling this method.
      *
      * @throws NotSupportedException
      */

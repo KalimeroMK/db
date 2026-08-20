@@ -14,7 +14,6 @@ use Yiisoft\Db\Expression\Value\Param;
 use Yiisoft\Db\Constant\ColumnType;
 use Yiisoft\Db\Constraint\ForeignKey;
 use Yiisoft\Db\Expression\Value\ArrayValue;
-use Yiisoft\Db\Expression\Expression;
 use Yiisoft\Db\Expression\Value\JsonValue;
 use Yiisoft\Db\Expression\Value\StructuredValue;
 use Yiisoft\Db\Schema\Column\ArrayColumn;
@@ -83,7 +82,6 @@ class ColumnProvider
                     [null, new Stringable('')],
                     [1, new Stringable('1')],
                     [1745071895, new DateTimeImmutable('2025-04-19 14:11:35')],
-                    [$expression = new Expression('1'), $expression],
                 ],
             ],
             'bigint' => [
@@ -103,7 +101,6 @@ class ColumnProvider
                     [1745071895, new DateTimeImmutable('2025-04-19 14:11:35')],
                     ['12345678901234567890', '12345678901234567890'],
                     ['12345678901234567890', new Stringable('12345678901234567890')],
-                    [$expression = new Expression('1'), $expression],
                 ],
             ],
             'double' => [
@@ -121,7 +118,6 @@ class ColumnProvider
                     [null, new Stringable('')],
                     [1.0, new Stringable('1')],
                     [1745071895.123456, new DateTimeImmutable('2025-04-19 14:11:35.123456')],
-                    [$expression = new Expression('1'), $expression],
                 ],
             ],
             'string' => [
@@ -140,7 +136,6 @@ class ColumnProvider
                     ['', new Stringable('')],
                     ['string', new Stringable('string')],
                     [$resource = fopen('php://memory', 'rb'), $resource],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
             'binary' => [
@@ -158,7 +153,6 @@ class ColumnProvider
                     [$resource = fopen('php://memory', 'rb'), $resource],
                     [new Param($resource = fopen('php://memory', 'rb'), PDO::PARAM_LOB), new StringableStream($resource)],
                     [new Param("\x10\x11\x12", PDO::PARAM_LOB), new StringableStream("\x10\x11\x12")],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
             'bit' => [
@@ -173,7 +167,6 @@ class ColumnProvider
                     [10, '10'],
                     [1, true],
                     [0, false],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
             'boolean' => [
@@ -189,7 +182,6 @@ class ColumnProvider
                     [false, 0],
                     [false, 0.0],
                     [false, '0'],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
             'timestamp' => [
@@ -209,7 +201,6 @@ class ColumnProvider
                     ['2025-04-19 14:11:35', new DateTimeImmutable('2025-04-19 14:11:35')],
                     ['2025-04-19 14:11:35', new DateTime('2025-04-19 14:11:35')],
                     ['2025-04-19 14:11:35', new Stringable('2025-04-19 14:11:35')],
-                    [$expression = new Expression("'2025-04-19 14:11:35'"), $expression],
                 ],
             ],
             'timestamp6' => [
@@ -229,7 +220,6 @@ class ColumnProvider
                     ['2025-04-19 14:11:35.123456', new DateTimeImmutable('2025-04-19 14:11:35.123456')],
                     ['2025-04-19 14:11:35.123456', new DateTime('2025-04-19 14:11:35.123456')],
                     ['2025-04-19 14:11:35.123456', new Stringable('2025-04-19 14:11:35.123456')],
-                    [$expression = new Expression("'2025-04-19 14:11:35.123456'"), $expression],
                 ],
             ],
             'datetime' => [
@@ -249,7 +239,6 @@ class ColumnProvider
                     ['2025-04-19 14:11:35', new DateTimeImmutable('2025-04-19 14:11:35')],
                     ['2025-04-19 14:11:35', new DateTime('2025-04-19 14:11:35')],
                     ['2025-04-19 14:11:35', new Stringable('2025-04-19 14:11:35')],
-                    [$expression = new Expression("'2025-04-19 14:11:35'"), $expression],
                 ],
             ],
             'datetime6' => [
@@ -269,7 +258,6 @@ class ColumnProvider
                     ['2025-04-19 14:11:35.123456', new DateTimeImmutable('2025-04-19 14:11:35.123456')],
                     ['2025-04-19 14:11:35.123456', new DateTime('2025-04-19 14:11:35.123456')],
                     ['2025-04-19 14:11:35.123456', new Stringable('2025-04-19 14:11:35.123456')],
-                    [$expression = new Expression("'2025-04-19 14:11:35.123456'"), $expression],
                 ],
             ],
             'datetimetz' => [
@@ -289,7 +277,6 @@ class ColumnProvider
                     ['2025-04-19 14:11:35+02:00', new DateTimeImmutable('2025-04-19 14:11:35 +02:00')],
                     ['2025-04-19 14:11:35+02:00', new DateTime('2025-04-19 14:11:35 +02:00')],
                     ['2025-04-19 14:11:35+02:00', new Stringable('2025-04-19 14:11:35 +02:00')],
-                    [$expression = new Expression("'2025-04-19 14:11:35 +02:00'"), $expression],
                 ],
             ],
             'datetimetz6' => [
@@ -309,7 +296,6 @@ class ColumnProvider
                     ['2025-04-19 14:11:35.123456+02:00', new DateTimeImmutable('2025-04-19 14:11:35.123456 +02:00')],
                     ['2025-04-19 14:11:35.123456+02:00', new DateTime('2025-04-19 14:11:35.123456 +02:00')],
                     ['2025-04-19 14:11:35.123456+02:00', new Stringable('2025-04-19 14:11:35.123456 +02:00')],
-                    [$expression = new Expression("'2025-04-19 14:11:35.123456 +02:00'"), $expression],
                 ],
             ],
             'time' => [
@@ -335,7 +321,6 @@ class ColumnProvider
                     ['14:11:35', new DateTimeImmutable('14:11:35')],
                     ['14:11:35', new DateTime('14:11:35')],
                     ['14:11:35', new Stringable('14:11:35')],
-                    [$expression = new Expression("'14:11:35'"), $expression],
                 ],
             ],
             'time6' => [
@@ -361,7 +346,6 @@ class ColumnProvider
                     ['14:11:35.123456', new DateTimeImmutable('14:11:35.123456')],
                     ['14:11:35.123456', new DateTime('14:11:35.123456')],
                     ['14:11:35.123456', new Stringable('14:11:35.123456')],
-                    [$expression = new Expression("'14:11:35.123456'"), $expression],
                 ],
             ],
             'timetz' => [
@@ -387,7 +371,6 @@ class ColumnProvider
                     ['14:11:35+02:00', new DateTimeImmutable('14:11:35 +02:00')],
                     ['14:11:35+02:00', new DateTime('14:11:35 +02:00')],
                     ['14:11:35+02:00', new Stringable('14:11:35 +02:00')],
-                    [$expression = new Expression("'14:11:35 +02:00'"), $expression],
                 ],
             ],
             'timetz6' => [
@@ -413,7 +396,6 @@ class ColumnProvider
                     ['14:11:35.123456+02:00', new DateTimeImmutable('14:11:35.123456 +02:00')],
                     ['14:11:35.123456+02:00', new DateTime('14:11:35.123456 +02:00')],
                     ['14:11:35.123456+02:00', new Stringable('14:11:35.123456 +02:00')],
-                    [$expression = new Expression("'14:11:35.123456 +02:00'"), $expression],
                 ],
             ],
             'date' => [
@@ -433,7 +415,6 @@ class ColumnProvider
                     ['2025-04-19', new DateTimeImmutable('2025-04-19 14:11:35')],
                     ['2025-04-19', new DateTime('2025-04-19 14:11:35')],
                     ['2025-04-19', new Stringable('2025-04-19 14:11:35')],
-                    [$expression = new Expression("'2025-04-19'"), $expression],
                 ],
             ],
             'json' => [
@@ -449,8 +430,6 @@ class ColumnProvider
                     [new JsonValue(['key' => 'value']), ['key' => 'value']],
                     [new JsonValue(['a' => 1]), ['a' => 1]],
                     [new JsonValue(new stdClass()), new stdClass()],
-                    [$expression = new JsonValue([1, 2, 3]), $expression],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
             'array' => [
@@ -461,7 +440,6 @@ class ColumnProvider
                     [new ArrayValue([1, 2, 3], $arrayCol), [1, 2, 3]],
                     [new ArrayValue($iterator = new ArrayIterator([1, 2, 3]), $arrayCol), $iterator],
                     [new ArrayValue('[1,2,3]', $arrayCol), '[1,2,3]'],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
             'structured' => [
@@ -472,7 +450,6 @@ class ColumnProvider
                     [new StructuredValue(['value' => 1, 'currency_code' => 'USD'], $structuredCol), ['value' => 1, 'currency_code' => 'USD']],
                     [new StructuredValue($iterator = new ArrayIterator(['value' => 1, 'currency_code' => 'USD']), $structuredCol), $iterator],
                     [new StructuredValue('[1,"USD"]', $structuredCol), '[1,"USD"]'],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
             'enum' => [
@@ -492,7 +469,6 @@ class ColumnProvider
                     ['', new Stringable('')],
                     ['string', new Stringable('string')],
                     [$resource = fopen('php://memory', 'rb'), $resource],
-                    [$expression = new Expression('expression'), $expression],
                 ],
             ],
         ];

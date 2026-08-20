@@ -20,8 +20,8 @@ abstract class AbstractJsonColumn extends AbstractColumn
 
     public function dbTypecast(mixed $value): ?ExpressionInterface
     {
-        if ($value === null || $value instanceof ExpressionInterface) {
-            return $value;
+        if ($value === null) {
+            return null;
         }
 
         return new JsonValue($value, $this->getDbType());

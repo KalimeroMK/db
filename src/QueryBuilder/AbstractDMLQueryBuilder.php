@@ -42,6 +42,7 @@ use function is_string;
 use function iterator_to_array;
 use function preg_match;
 use function reset;
+use function Yiisoft\Db\dbTypecast;
 
 /**
  * It's used to manipulate data in tables.
@@ -238,7 +239,7 @@ abstract class AbstractDMLQueryBuilder implements DMLQueryBuilderInterface
                 $columnName = $columnNames[$key] ?? (isset($keys[$key]) ? $key : $names[$i] ?? $i);
 
                 if (isset($columns[$columnName])) {
-                    $value = $columns[$columnName]->dbTypecast($value);
+                    $value = dbTypecast($columns[$columnName], $value);
                 }
 
                 $placeholders[$columnName] = $queryBuilder->buildValue($value, $params);
@@ -377,7 +378,7 @@ abstract class AbstractDMLQueryBuilder implements DMLQueryBuilderInterface
 
         foreach ($columns as $name => $value) {
             if (isset($tableColumns[$name])) {
-                $value = $tableColumns[$name]->dbTypecast($value);
+                $value = dbTypecast($tableColumns[$name], $value);
             }
             $placeholders[] = $this->queryBuilder->buildValue($value, $params);
         }
@@ -415,7 +416,7 @@ abstract class AbstractDMLQueryBuilder implements DMLQueryBuilderInterface
 
         foreach ($columns as $name => $value) {
             if (isset($typecastColumns[$name])) {
-                $value = $typecastColumns[$name]->dbTypecast($value);
+                $value = dbTypecast($typecastColumns[$name], $value);
             }
 
             $quotedName = $quoter->quoteSimpleColumnName($name);

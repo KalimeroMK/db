@@ -53,8 +53,8 @@ abstract class AbstractStructuredColumn extends AbstractColumn
      */
     public function dbTypecast(mixed $value): ?ExpressionInterface
     {
-        if ($value === null || $value instanceof ExpressionInterface) {
-            return $value;
+        if ($value === null) {
+            return null;
         }
 
         return new StructuredValue($value, $this);

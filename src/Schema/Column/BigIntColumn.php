@@ -8,7 +8,6 @@ use BackedEnum;
 use DateTimeInterface;
 use Stringable;
 use Yiisoft\Db\Constant\ColumnType;
-use Yiisoft\Db\Expression\ExpressionInterface;
 use Yiisoft\Db\Constant\GettypeResult;
 
 use function gettype;
@@ -24,10 +23,10 @@ class BigIntColumn extends AbstractColumn
 {
     protected const DEFAULT_TYPE = ColumnType::BIGINT;
 
-    public function dbTypecast(mixed $value): int|string|ExpressionInterface|null
+    public function dbTypecast(mixed $value): int|string|null
     {
         /**
-         * @var ExpressionInterface|int|string|null
+         * @var int|string|null
          * @psalm-suppress MixedArgument
          */
         return match (gettype($value)) {
@@ -37,7 +36,6 @@ class BigIntColumn extends AbstractColumn
             GettypeResult::DOUBLE => $this->dbTypecastString((string) $value),
             GettypeResult::BOOLEAN => $value ? 1 : 0,
             GettypeResult::OBJECT => match (true) {
-                $value instanceof ExpressionInterface => $value,
                 $value instanceof BackedEnum => is_int($value->value)
                     ? $value->value
                     : $this->dbTypecastString($value->value),

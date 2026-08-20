@@ -76,8 +76,8 @@ abstract class AbstractArrayColumn extends AbstractColumn
      */
     public function dbTypecast(mixed $value): ?ExpressionInterface
     {
-        if ($value === null || $value instanceof ExpressionInterface) {
-            return $value;
+        if ($value === null) {
+            return null;
         }
 
         return new ArrayValue($value, $this);
