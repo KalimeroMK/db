@@ -28,12 +28,10 @@ final class FunctionsTest extends TestCase
 
     public function testDbTypecastReturnsExpressionAsIs(): void
     {
-        $column = $this->createMock(ColumnInterface::class);
-        $column->expects($this->never())->method('dbTypecast');
-
         $expression = new Expression('1');
 
-        $this->assertSame($expression, dbTypecast($column, $expression));
+        // Expressions are passed to the column; core columns return them as is.
+        $this->assertSame($expression, dbTypecast(new IntegerColumn(), $expression));
     }
 
     public function testDbTypecastDelegatesToColumn(): void
