@@ -2,8 +2,8 @@
 
 ## 2.0.2 under development
 
-- New #960: Add `Yiisoft\Db\dbTypecast()` function that returns `null` values as is, and delegates other values
-  to `ColumnInterface::dbTypecast()` (@KalimeroMK)
+- Enh #960: Skip type casting of `null` values in DML query builders and column definition builder —
+  `null` is now passed through without calling `ColumnInterface::dbTypecast()` (@KalimeroMK)
 
 - Enh #1172: Refactor `Query::queryScalar()` to use a cloned `Query` object (@darkspock)
 - New #1178: Support `UnitEnum` enums as column values (@Tigrov)

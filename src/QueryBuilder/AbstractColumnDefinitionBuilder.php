@@ -12,7 +12,6 @@ use Yiisoft\Db\Schema\Column\EnumColumn;
 
 use function in_array;
 use function strtolower;
-use function Yiisoft\Db\dbTypecast;
 
 /**
  * Builds column definition from {@see ColumnInterface} object. Column definition is a string that represents
@@ -194,7 +193,8 @@ abstract class AbstractColumnDefinitionBuilder implements ColumnDefinitionBuilde
             return '';
         }
 
-        $defaultValue = dbTypecast($column, $column->getDefaultValue());
+        $defaultValue = $column->getDefaultValue();
+        $defaultValue = $defaultValue === null ? null : $column->dbTypecast($defaultValue);
         $defaultValue = $this->queryBuilder->prepareValue($defaultValue);
 
         if ($defaultValue === '') {

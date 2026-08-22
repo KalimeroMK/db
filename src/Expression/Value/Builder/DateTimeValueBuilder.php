@@ -11,8 +11,6 @@ use Yiisoft\Db\Expression\ExpressionInterface;
 use Yiisoft\Db\QueryBuilder\QueryBuilderInterface;
 use Yiisoft\Db\Schema\Column\ColumnFactoryInterface;
 
-use function Yiisoft\Db\dbTypecast;
-
 /**
  * Builder for {@see DateTimeValue} expressions.
  *
@@ -35,8 +33,9 @@ final class DateTimeValueBuilder implements ExpressionBuilderInterface
 
     public function build(ExpressionInterface $expression, array &$params = []): string
     {
-        $column = $this->columnFactory->fromType($this->prepareType($expression), $this->prepareInfo($expression));
-        $value = dbTypecast($column, $expression->value);
+        $value = $this->columnFactory
+            ->fromType($this->prepareType($expression), $this->prepareInfo($expression))
+            ->dbTypecast($expression->value);
         return $this->queryBuilder->buildValue($value, $params);
     }
 
