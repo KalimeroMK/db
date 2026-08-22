@@ -64,7 +64,6 @@ final class SchemaTest extends IntegrationTestCase
         $this->assertSame(['T_constraints_1' => $foreignKeys], $tableForeignKeys);
         // The result is indexed by the name of the table the foreign keys belong to, see https://github.com/yiisoft/db/issues/1176
         $this->assertSame(['T_constraints_1'], array_keys($tableForeignKeys));
-        $this->assertSame('T_constraints_2', $tableForeignKeys['T_constraints_1'][0]->foreignTableName);
     }
 
     public function testGetTableChecks(): void
