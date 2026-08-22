@@ -6,7 +6,9 @@ namespace Yiisoft\Db\Tests\Db\Schema;
 
 use Yiisoft\Db\Cache\SchemaCache;
 use Yiisoft\Db\Constraint\Check;
+use Yiisoft\Db\Constraint\DefaultValue;
 use Yiisoft\Db\Constraint\ForeignKey;
+use Yiisoft\Db\Constraint\Index;
 use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Db\Schema\Column\ColumnBuilder;
 use Yiisoft\Db\Schema\TableSchema;
@@ -63,6 +65,48 @@ final class SchemaTest extends IntegrationTestCase
         // The result is indexed by the name of the table the foreign keys belong to, see https://github.com/yiisoft/db/issues/1176
         $this->assertSame(['T_constraints_1'], array_keys($tableForeignKeys));
         $this->assertSame('T_constraints_2', $tableForeignKeys['T_constraints_1'][0]->foreignTableName);
+    }
+
+    public function testGetTableChecks(): void
+    {
+        $db = $this->getSharedConnection();
+
+        $checks = [new Check('check_1', ['col1', 'col2'], 'col1 > col2')];
+        $schemaMock = $this->getMockBuilder(Schema::class)
+            ->onlyMethods(['loadTableChecks'])
+            ->setConstructorArgs([$db, TestHelper::createMemorySchemaCache()])
+            ->getMock();
+        $schemaMock->expects($this->once())->method('loadTableChecks')->willReturn($checks);
+
+        $this->assertSame($checks, $schemaMock->getTableChecks('T_constraints_1'));
+    }
+
+    public function testGetTableDefaultValues(): void
+    {
+        $db = $this->getSharedConnection();
+
+        $defaultValues = [new DefaultValue('df_1', ['col1'], 42)];
+        $schemaMock = $this->getMockBuilder(Schema::class)
+            ->onlyMethods(['loadTableDefaultValues'])
+            ->setConstructorArgs([$db, TestHelper::createMemorySchemaCache()])
+            ->getMock();
+        $schemaMock->expects($this->once())->method('loadTableDefaultValues')->willReturn($defaultValues);
+
+        $this->assertSame($defaultValues, $schemaMock->getTableDefaultValues('T_constraints_1'));
+    }
+
+    public function testGetTableIndexes(): void
+    {
+        $db = $this->getSharedConnection();
+
+        $indexes = [new Index('PK__T_constr__A9FAE80AC2B18E65', ['C_id'], true, true)];
+        $schemaMock = $this->getMockBuilder(Schema::class)
+            ->onlyMethods(['loadTableIndexes'])
+            ->setConstructorArgs([$db, TestHelper::createMemorySchemaCache()])
+            ->getMock();
+        $schemaMock->expects($this->once())->method('loadTableIndexes')->willReturn($indexes);
+
+        $this->assertSame($indexes, $schemaMock->getTableIndexes('T_constraints_1'));
     }
 
     public function testGetSchemaNames(): void

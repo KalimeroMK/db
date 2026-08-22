@@ -396,7 +396,6 @@ abstract class AbstractSchema implements SchemaInterface
                 $name = $schema . '.' . $name;
             }
 
-            /** @var ForeignKey[]|TableSchemaInterface|null $tableMetadata */
             $tableMetadata = $this->getTableTypeMetadata($type, $name, $refresh);
 
             if ($tableMetadata !== null) {
@@ -464,21 +463,16 @@ abstract class AbstractSchema implements SchemaInterface
     /**
      * This method returns the desired metadata type for table name (with refresh if needed).
      *
-     * @return Check[]|DefaultValue[]|ForeignKey[]|Index|Index[]|TableSchemaInterface|null
+     * @return ForeignKey[]|TableSchemaInterface|null
      */
     protected function getTableTypeMetadata(
         string $type,
         string $name,
         bool $refresh = false,
-    ): array|Index|TableSchemaInterface|null {
+    ): array|TableSchemaInterface|null {
         return match ($type) {
             SchemaInterface::SCHEMA => $this->getTableSchema($name, $refresh),
-            SchemaInterface::PRIMARY_KEY => $this->getTablePrimaryKey($name, $refresh),
-            SchemaInterface::UNIQUES => $this->getTableUniques($name, $refresh),
             SchemaInterface::FOREIGN_KEYS => $this->getTableForeignKeys($name, $refresh),
-            SchemaInterface::INDEXES => $this->getTableIndexes($name, $refresh),
-            SchemaInterface::DEFAULT_VALUES => $this->getTableDefaultValues($name, $refresh),
-            SchemaInterface::CHECKS => $this->getTableChecks($name, $refresh),
             default => null,
         };
     }
