@@ -33,17 +33,6 @@ final class ConvertExceptionTest extends TestCase
     public function testRunSerializationFailure(): void
     {
         $e = new PDOException('SQLSTATE[40001]: could not serialize access due to concurrent update');
-        $rawSql = "UPDATE test SET name = 'test' WHERE id = 1";
-        $convertException = new ConvertException($e, $rawSql);
-        $exception = $convertException->run();
-
-        $this->assertInstanceOf(SerializationFailureException::class, $exception);
-        $this->assertSame($e, $exception->getPrevious());
-    }
-
-    public function testRunSerializationFailureByErrorInfo(): void
-    {
-        $e = new PDOException('could not serialize access due to concurrent update');
         $e->errorInfo = ['40001', 1213, 'could not serialize access due to concurrent update'];
         $rawSql = "UPDATE test SET name = 'test' WHERE id = 1";
         $convertException = new ConvertException($e, $rawSql);

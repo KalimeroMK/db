@@ -20,7 +20,6 @@ final class ConvertException
     private const MSG_INTEGRITY_EXCEPTION_1 = 'SQLSTATE[23';
     private const MGS_INTEGRITY_EXCEPTION_2 = 'ORA-00001: unique constraint';
     private const MSG_INTEGRITY_EXCEPTION_3 = 'SQLSTATE[HY';
-    private const MSG_SERIALIZATION_FAILURE = 'SQLSTATE[40001]';
 
     public function __construct(
         private readonly \Exception $e,
@@ -38,10 +37,7 @@ final class ConvertException
 
         $errorInfo = $this->e instanceof PDOException ? $this->e->errorInfo : null;
 
-        if (
-            ($errorInfo[0] ?? null) === '40001'
-            || str_contains($this->e->getMessage(), self::MSG_SERIALIZATION_FAILURE)
-        ) {
+        if (($errorInfo[0] ?? null) === '40001') {
             return new SerializationFailureException($message, $errorInfo, $this->e);
         }
 
