@@ -40,4 +40,27 @@ final class ConvertExceptionTest extends TestCase
         $this->assertInstanceOf(SerializationFailureException::class, $exception);
         $this->assertSame($e, $exception->getPrevious());
     }
+
+    public function testRunSerializationFailureByErrorInfo(): void
+    {
+        $e = new PDOException('could not serialize access due to concurrent update');
+        $e->errorInfo = ['40001', 1213, 'could not serialize access due to concurrent update'];
+        $rawSql = "UPDATE test SET name = 'test' WHERE id = 1";
+        $convertException = new ConvertException($e, $rawSql);
+        $exception = $convertException->run();
+
+        $this->assertInstanceOf(SerializationFailureException::class, $exception);
+        $this->assertSame($e, $exception->getPrevious());
+    }
+
+    public function testRunSerializationFailureMarkerInSqlOnly(): void
+    {
+        $e = new PDOException('General error: 2006 MySQL server has gone away');
+        $rawSql = "SELECT * FROM logs WHERE message LIKE '%SQLSTATE[40001]%'";
+        $convertException = new ConvertException($e, $rawSql);
+        $exception = $convertException->run();
+
+        $this->assertNotInstanceOf(SerializationFailureException::class, $exception);
+        $this->assertSame($e, $exception->getPrevious());
+    }
 }
