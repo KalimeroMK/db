@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
+use Rector\Php74\Rector\If_\IfToNullCoalescingAssignRector;
 use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
@@ -33,6 +34,9 @@ return RectorConfig::configure()
         GetDebugTypeRector::class => [
             __DIR__ . '/tests/Common/CommonColumnTest.php',
             __DIR__ . '/tests/Db/Schema/Column/ColumnTest.php',
+        ],
+        IfToNullCoalescingAssignRector::class => [
+            __DIR__ . '/src/Driver/Pdo/PdoServerInfo.php',
         ],
         ReadOnlyPropertyRector::class,
         NullToStrictStringFuncCallArgRector::class,
