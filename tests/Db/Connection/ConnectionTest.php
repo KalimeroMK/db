@@ -7,6 +7,7 @@ namespace Yiisoft\Db\Tests\Db\Connection;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Db\Cache\SchemaCache;
+use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Db\Expression\Expression;
 use Yiisoft\Db\Expression\ExpressionInterface;
 use Yiisoft\Db\Query\Query;
@@ -65,6 +66,36 @@ final class ConnectionTest extends TestCase
         $db = $this->createConnection();
 
         Assert::objectsEquals($db->select(), $db->createQuery());
+    }
+
+    public function testBeginTransactionCreatesTransactionAndReusesActiveOne(): void
+    {
+        $db = $this->createConnection();
+        $db->setEnableSavepoint(false);
+
+        $transaction = $db->beginTransaction();
+
+        $this->assertTrue($transaction->isActive());
+        $this->assertSame(1, $transaction->getLevel());
+        $this->assertSame($transaction, $db->getTransaction());
+
+        // A nested call reuses the active transaction instead of creating a new one.
+        try {
+            $db->beginTransaction();
+            $this->fail('Nested transaction is expected to fail when savepoints are disabled.');
+        } catch (NotSupportedException $e) {
+            $this->assertSame('Transaction not started: nested transaction not supported.', $e->getMessage());
+        }
+
+        $this->assertSame($transaction, $db->getTransaction());
+        $this->assertSame(1, $transaction->getLevel());
+
+        $transaction->rollBack();
+
+        $this->assertFalse($transaction->isActive());
+        $this->assertNull($db->getTransaction());
+
+        $db->close();
     }
 
     private function createConnection(?StubColumnFactory $columnFactory = null): StubConnection
