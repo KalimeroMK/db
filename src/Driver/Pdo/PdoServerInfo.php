@@ -8,6 +8,8 @@ use PDO;
 use Yiisoft\Db\Connection\ServerInfoInterface;
 use Yiisoft\Db\Exception\NotSupportedException;
 
+use function is_string;
+
 class PdoServerInfo implements ServerInfoInterface
 {
     protected ?string $version = null;
@@ -21,11 +23,13 @@ class PdoServerInfo implements ServerInfoInterface
 
     public function getVersion(): string
     {
-        if ($this->version === null) {
-            /** @var string */
-            $this->version = $this->db->getActivePdo()->getAttribute(PDO::ATTR_SERVER_VERSION) ?? '';
-        }
+        return $this->version ??= $this->fetchVersion();
+    }
 
-        return $this->version;
+    private function fetchVersion(): string
+    {
+        $version = $this->db->getActivePdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
+
+        return is_string($version) ? $version : '';
     }
 }

@@ -30,9 +30,7 @@ abstract class AbstractConnection implements ConnectionInterface
     public function beginTransaction(?string $isolationLevel = null): TransactionInterface
     {
         $this->open();
-        $this->transaction = $this->getTransaction();
-
-        $this->transaction ??= $this->createTransaction();
+        $this->transaction = $this->getTransaction() ?? $this->createTransaction();
 
         $this->transaction->begin($isolationLevel);
 
