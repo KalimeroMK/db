@@ -10,6 +10,8 @@
   `getSchemaDefaultValues()`, `getSchemaForeignKeys()`, `getSchemaIndexes()`, `getSchemaPrimaryKeys()`,
   `getSchemaUniques()` and `getTableSchemas()` expose the table each item belongs to (@KalimeroMK)
 - New #1152: Add `UuidValue` expression that represents a UUID value independently of DBMS (@KalimeroMK)
+- Enh #1152: Improve the exception message of `DbUuidHelper::toUuid()` when the value isn't a valid UUID
+  (@KalimeroMK)
 
 ## 2.0.1 February 09, 2026
 

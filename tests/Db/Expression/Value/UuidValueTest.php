@@ -55,16 +55,4 @@ final class UuidValueTest extends TestCase
 
         new UuidValue($value);
     }
-
-    public function testPreviousExceptionIsKept(): void
-    {
-        try {
-            new UuidValue('not-a-uuid');
-        } catch (InvalidArgumentException $e) {
-            $this->assertInstanceOf(InvalidArgumentException::class, $e->getPrevious());
-            return;
-        }
-
-        self::fail('The exception was not thrown.');
-    }
 }

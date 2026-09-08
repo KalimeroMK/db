@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Db\Expression\Value\Builder;
 
+use Yiisoft\Db\Constant\DataType;
 use Yiisoft\Db\Expression\ExpressionBuilderInterface;
 use Yiisoft\Db\Expression\ExpressionInterface;
+use Yiisoft\Db\Expression\Value\Param;
 use Yiisoft\Db\Expression\Value\UuidValue;
-use Yiisoft\Db\QueryBuilder\QueryBuilderInterface;
 use Yiisoft\Db\Helper\DbUuidHelper;
+use Yiisoft\Db\QueryBuilder\QueryBuilderInterface;
 
 /**
  * Builder for {@see UuidValue} expressions.
  *
- * Binds the UUID in the canonical string form, which is what PostgreSQL `uuid` and MSSQL `uniqueidentifier` columns
- * expect. DBMS that store a UUID as raw bytes, such as MySQL, MariaDB, SQLite and Oracle, override
- * {@see prepareValue()} to convert the value with {@see DbUuidHelper::uuidToBlob()}.
+ * Binds the UUID as a string parameter in the canonical form, which is what PostgreSQL `uuid` and MSSQL
+ * `uniqueidentifier` columns expect. DBMS that store a UUID as raw bytes, such as MySQL, MariaDB, SQLite and Oracle,
+ * override {@see prepareValue()} to convert the value with {@see DbUuidHelper::uuidToBlob()} and bind it as
+ * {@see DataType::LOB}, so the driver sends it as binary rather than as a character string.
  *
  * @implements ExpressionBuilderInterface<UuidValue>
  */
@@ -34,14 +37,14 @@ class UuidValueBuilder implements ExpressionBuilderInterface
     }
 
     /**
-     * Converts the UUID to the representation expected by the DBMS.
+     * Converts the UUID to the parameter expected by the DBMS.
      *
      * @param UuidValue $expression The expression to convert.
      *
-     * @return mixed The value to bind, it's passed to {@see QueryBuilderInterface::buildValue()}.
+     * @return Param The parameter to bind, it's passed to {@see QueryBuilderInterface::buildValue()}.
      */
-    protected function prepareValue(UuidValue $expression): mixed
+    protected function prepareValue(UuidValue $expression): Param
     {
-        return $expression->value;
+        return new Param($expression->value, DataType::STRING);
     }
 }

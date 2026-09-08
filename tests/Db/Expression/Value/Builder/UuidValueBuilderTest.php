@@ -53,7 +53,7 @@ final class UuidValueBuilderTest extends TestCase
     {
         $db = TestHelper::createSqliteMemoryConnection();
         $builder = new class ($db->getQueryBuilder()) extends UuidValueBuilder {
-            protected function prepareValue(UuidValue $expression): mixed
+            protected function prepareValue(UuidValue $expression): Param
             {
                 return new Param(DbUuidHelper::uuidToBlob($expression->value), DataType::LOB);
             }

@@ -50,13 +50,6 @@ final class UuidValue implements ExpressionInterface
      */
     public function __construct(string|Stringable $value)
     {
-        try {
-            $this->value = strtolower(DbUuidHelper::toUuid((string) $value));
-        } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException(
-                'Value is not a valid UUID. Expected the canonical form, 32 hexadecimal characters or 16 raw bytes.',
-                previous: $e,
-            );
-        }
+        $this->value = strtolower(DbUuidHelper::toUuid((string) $value));
     }
 }
