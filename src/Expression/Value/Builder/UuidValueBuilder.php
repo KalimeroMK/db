@@ -9,7 +9,6 @@ use Yiisoft\Db\Expression\ExpressionBuilderInterface;
 use Yiisoft\Db\Expression\ExpressionInterface;
 use Yiisoft\Db\Expression\Value\Param;
 use Yiisoft\Db\Expression\Value\UuidValue;
-use Yiisoft\Db\Helper\DbUuidHelper;
 use Yiisoft\Db\QueryBuilder\QueryBuilderInterface;
 
 /**
@@ -17,34 +16,22 @@ use Yiisoft\Db\QueryBuilder\QueryBuilderInterface;
  *
  * Binds the UUID as a string parameter in the canonical form, which is what PostgreSQL `uuid` and MSSQL
  * `uniqueidentifier` columns expect. DBMS that store a UUID as raw bytes, such as MySQL, MariaDB, SQLite and Oracle,
- * override {@see prepareValue()} to convert the value with {@see DbUuidHelper::uuidToBlob()} and bind it as
- * {@see DataType::LOB}, so the driver sends it as binary rather than as a character string.
+ * provide their own builder in the DBMS-specific package.
  *
  * @implements ExpressionBuilderInterface<UuidValue>
  */
-class UuidValueBuilder implements ExpressionBuilderInterface
+final class UuidValueBuilder implements ExpressionBuilderInterface
 {
     /**
      * @param QueryBuilderInterface $queryBuilder The query builder instance.
      */
     public function __construct(
-        protected readonly QueryBuilderInterface $queryBuilder,
+        private readonly QueryBuilderInterface $queryBuilder,
     ) {}
 
     public function build(ExpressionInterface $expression, array &$params = []): string
     {
-        return $this->queryBuilder->buildValue($this->prepareValue($expression), $params);
-    }
-
-    /**
-     * Converts the UUID to the parameter expected by the DBMS.
-     *
-     * @param UuidValue $expression The expression to convert.
-     *
-     * @return Param The parameter to bind, it's passed to {@see QueryBuilderInterface::buildValue()}.
-     */
-    protected function prepareValue(UuidValue $expression): Param
-    {
-        return new Param($expression->value, DataType::STRING);
+        /** @var UuidValue $expression */
+        return $this->queryBuilder->buildValue(new Param($expression->value, DataType::STRING), $params);
     }
 }
