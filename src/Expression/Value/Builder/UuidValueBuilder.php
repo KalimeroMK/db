@@ -32,6 +32,6 @@ final class UuidValueBuilder implements ExpressionBuilderInterface
     public function build(ExpressionInterface $expression, array &$params = []): string
     {
         /** @var UuidValue $expression */
-        return $this->queryBuilder->buildValue(new Param($expression->value, DataType::STRING), $params);
+        return $this->queryBuilder->bindParam(new Param($expression->value, DataType::STRING), $params);
     }
 }
